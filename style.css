@@ -1,6 +1,6 @@
-/* Dark green color palette */
+/* Bright green color palette */
 body {
-  background-color: #13221E;
+    background-color: #67F38B;
 }
 
 h1,
@@ -9,34 +9,34 @@ h3,
 h4,
 h5,
 h6 {
-  color: #578A76;
+    color: #FFFA84;
 }
 
 p {
-  color: #578A76;
+    color: #FFFA84;
 }
 
 button {
-  background-color: #619F88;
-  color: white;
+    background-color: #FFFA84;
+    color: #67F38B;
 }
 
 select,
 input {
-  background-color: #fff;
-  color: #000;
+    background-color: #67F38B;
+    color: #FFFA84;
 }
 
 /* Basic game interface rules */
 button {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 select,
 input {
-  border: 1px solid #ccc;
-  padding: 5px;
-  margin: 5px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    margin: 5px;
 }
 
 /* You can add more rules here to style your specific game interface */
