@@ -1,4 +1,3 @@
-import { HammerShards } from './HammerShards.js';
 
 const game = new HammerShards();
 
