@@ -1,4 +1,6 @@
 # ShardsHammer
 Collect Shards, Create Hammer, find Ultimate Glory. :)
 
-Completly created bij the AI from Bard. :)
+Mostly ~Completly~ created by AI from Bard. :)
+
+Find it here: https://vampie.github.io/ShardsHammer/
