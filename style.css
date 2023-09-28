@@ -41,7 +41,6 @@ input {
 
 button:disabled {
     background-color: #990000;
-    font-size: 0.8em;
     opacity: 0.5;
 }
 /* You can add more rules here to style your specific game interface */
