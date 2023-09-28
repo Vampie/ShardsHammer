@@ -2,25 +2,32 @@ class HammerShards {
     constructor() {
         this.shards = 0;
         this.hammerCount = 0;
+        this.hammerEpicCount = 0;
         this.prestigePoints = 0;
         this.epicHammerBonus = 0;
-        this.epicHammerCostMultiplier = 1;
+        this.hammerCost = 100;
+        this.hammerEpicCost = 500;
+
+    }
+
+    #collectShards() {
+        this.shards += Math.floor(Math.random() * 10) + 1;
     }
 
     collectShards() {
-        // Multiply the number of shards collected by the epic hammer bonus.
-        this.shards += Math.floor(Math.random() * 10) + 1;
-        this.shards *= 1 + this.epicHammerBonus;
+        this.#collectShards();
     }
 
-    createHammer() {
+    #createHammer() {
         // Multiply the cost of creating a hammer by the epic hammer cost multiplier.
-        const hammerCost = 100 * this.epicHammerCostMultiplier;
+        const hammerCost = this.hammerCost+(this.hammerCost * this.epicHammerBonus);;
+        const hammerEpicCost = this.hammerEpicCost+(this.hammerEpicCost * this.epicHammerBonus);;
 
         if (this.shards >= hammerCost) {
-            if (this.shards >= 500) {
+            if (this.shards >= hammerEpicCost) {
                 // Create an epic hammer.
                 this.epicHammerBonus += 0.25;
+                this.hammerEpicCount += 1;
             }
 
             this.hammerCount += 1;
@@ -28,7 +35,11 @@ class HammerShards {
         }
     }
 
-    prestige() {
+    createHammer() {
+        this.#createHammer();
+    }
+
+    #prestige() {
         // Multiply the cost of creating an epic hammer by 1 + the prestige points.
         this.epicHammerCostMultiplier += 0.25;
 
@@ -36,6 +47,23 @@ class HammerShards {
         this.hammerCount = 0;
     }
 
+    prestige() {
+        this.#prestige();
+    }
+
+    // Calculates the cost of prestiging.
+    calculatePrestigeCost() {
+        return 100 * this.epicHammerCostMultiplier;
+    }
+
+    // Calculates the cost of creating both hammers.
+    calculateTotalHammerCost() {
+        return this.hammerCost + (this.hammerCost * this.epicHammerBonus);
+    }
+
+    calculateTotalHammerEpicCost() {
+        return this.hammerEpicCost + (this.hammerEpicCost * this.epicHammerBonus);
+    }
     getShards() {
         return this.shards;
     }
@@ -44,6 +72,9 @@ class HammerShards {
         return this.hammerCount;
     }
 
+    getHammerEpicCount() {
+        return this.hammerEpicCount;
+    }
     getPrestigePoints() {
         return this.prestigePoints;
     }
@@ -53,6 +84,6 @@ class HammerShards {
     }
 
     getEpicHammerCostMultiplier() {
-        return this.epicHammerCostMultiplier;
+        return this.epicHammerBonus;
     }
 }

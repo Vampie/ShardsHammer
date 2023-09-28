@@ -1,24 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>My Game</title>
+    <title>Hammer Shards</title>
     <link rel="stylesheet" href="style.css">
-    <script src="HammerShard.js"></script>
 </head>
 <body>
-    <h1>My Game</h1>
+    <h1>Hammer Shards</h1>
 
-    <div id="gameInterface">
-        <button id="collectShardsButton">Collect Shards</button>
-        <button id="createHammerButton">Create Hammer</button>
-        <button id="prestigeButton">Prestige</button>
+    <p>Shards: <span id="shards">0</span></p>
+    <p>Hammers: <span id="hammerCount">0</span></p>
+    <p>Epic Hammers: <span id="hammerEpicCount">0</span></p>
+    <p>Prestige Points: <span id="prestigePoints">0</span></p>
+    <p>Epic Hammer Bonus: <span id="epicHammerBonus">0</span></p>
+    <p>Hammer Cost: <span id="hammerCost">0</span></p>
+    <p>Epic Hammer Cost: <span id="hammerEpicCost">0</span></p>
 
-        <p>Shards: <span id="shards"></span></p>
-        <p>Hammers: <span id="hammerCount"></span></p>
-        <p>Prestige points: <span id="prestigePoints"></span></p>
-        <p>Epic hammer bonus: <span id="epicHammerBonus"></span></p>
-    </div>
+    <button id="collectShardsButton">Collect Shards</button>
+    <button id="createHammerButton">Create Hammer</button>
+    <button id="prestigeButton">Prestige</button>
+
+    <script src="HammerShard.js"></script>
     <script src="game.js"></script>
 </body>
 </html>
