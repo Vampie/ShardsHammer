@@ -5,12 +5,13 @@ const game = new HammerShards();
 document.getElementById('collectShardsButton').addEventListener('click', () => { game.collectShards(); updateUI() });
 document.getElementById('createHammerButton').addEventListener('click', () => {
     const isEpic = game.createHammer();
-    document.getElementById('message').textContent = isEpic ? `Epic hammer found! +${percent(RULES.epicBonus)} shards per click.` : '';
+    document.getElementById('message').textContent = isEpic ? `Lucky! Epic hammer found: +${percent(RULES.epicBonus)} shards per click.` : '';
     updateUI();
 });
+document.getElementById('buyEpicHammerButton').addEventListener('click', () => { game.buyEpicHammer(); updateUI() });
 document.getElementById('prestigeButton').addEventListener('click', () => {
     // Prestige wipes shards and hammers, so ask first: one misclick on mobile would cost the whole run.
-    if (confirm(`Prestige for ${game.getPrestigeGain()} prestige points? Your shards and hammers reset to 0.`)) {
+    if (confirm(`Prestige for ${game.getPrestigeGain()} prestige points? Your shards and hammers reset to 0. Epic hammers stay.`)) {
         game.prestige();
         updateUI();
     }
@@ -41,16 +42,25 @@ function setText(id, text) {
 
 // Update the UI.
 function updateUI() {
+    const [minClick, maxClick] = game.getClickRange();
     setText('shards', number(game.getShards()));
+    setText('clickRange', `${number(minClick)} – ${number(maxClick)}`);
+
     setText('hammerCount', game.getHammerCount());
-    setText('hammerEpicCount', game.getHammerEpicCount());
-    setText('prestigePoints', game.getPrestigePoints());
-    setText('epicHammerBonus', '+' + percent(game.getEpicHammerBonus()));
+    setText('hammerEffect', `+${RULES.shardsPerHammer} shard per click each\nTotal: +${game.getHammerCount() * RULES.shardsPerHammer} per click`);
     setText('hammerCost', number(game.calculateTotalHammerCost()));
-    setText('epicChance', percent(game.getEpicChance()));
+
+    setText('hammerEpicCount', game.getHammerEpicCount());
+    setText('epicEffect', `+${percent(RULES.epicBonus)} shards each\nTotal: +${percent(game.getEpicHammerBonus())}\nLucky drop: ${percent(game.getEpicChance())} per hammer bought`);
+    setText('hammerEpicCost', number(game.calculateTotalHammerEpicCost()));
+
+    setText('prestigePoints', game.getPrestigePoints());
+    setText('prestigeEffect', `+${percent(RULES.prestigeBonus)} shards each, forever\nTotal: +${percent(game.getPrestigeBonus())}`);
+    setText('prestigeGain', game.getPrestigeGain());
 
     // Disable the buttons if they need to be disabled.
     document.getElementById('createHammerButton').disabled = game.calculateTotalHammerCost() > game.getShards();
+    document.getElementById('buyEpicHammerButton').disabled = game.calculateTotalHammerEpicCost() > game.getShards();
     document.getElementById('prestigeButton').disabled = game.getPrestigeGain() === 0;
 
     updateInfo();
@@ -58,24 +68,24 @@ function updateUI() {
 }
 
 function updateInfo() {
+    const [minClick, maxClick] = game.getClickRange();
     const hammers = game.getHammerCount();
-    const hammerShards = hammers * RULES.shardsPerHammer;
-    const multiplier = game.getMultiplier();
     document.getElementById('info').innerHTML = `
         <h3>Collect Shards</h3>
         <p>A click gives 1–10 shards, plus ${RULES.shardsPerHammer} per hammer, times your epic and prestige bonus.
-            Right now: <b>${number((1 + hammerShards) * multiplier)} – ${number((10 + hammerShards) * multiplier)}</b> shards per click.</p>
-        <h3>Hammer</h3>
-        <p>Each hammer gives +${RULES.shardsPerHammer} shard per click. You have ${hammers}: <b>+${hammerShards}</b> per click.
+            Right now: <b>${number(minClick)} – ${number(maxClick)}</b> shards per click.</p>
+        <h3 class="hammer">Hammer</h3>
+        <p>Each hammer gives +${RULES.shardsPerHammer} shard per click. You have ${hammers}: <b>+${hammers * RULES.shardsPerHammer}</b> per click.
             Every hammer makes the next one ${percent(RULES.hammerCostGrowth - 1)} more expensive. Hammers reset when you prestige.</p>
-        <h3>Epic Hammer</h3>
-        <p>Every hammer you buy has a small chance to also give an epic hammer: now <b>${percent(game.getEpicChance())}</b>.
-            Each epic hammer gives +${percent(RULES.epicBonus)} shards per click (you: <b>+${percent(game.getEpicHammerBonus())}</b>).
-            Epic hammers stay when you prestige.</p>
-        <h3>Prestige Points</h3>
+        <h3 class="epic">Epic Hammer</h3>
+        <p>Each epic hammer gives +${percent(RULES.epicBonus)} shards per click (you: <b>+${percent(game.getEpicHammerBonus())}</b>).
+            Buy one for <b>${number(game.calculateTotalHammerEpicCost())}</b> shards; every epic hammer you own makes the next one
+            ${percent(RULES.epicCostGrowth - 1)} more expensive. Or get lucky: every hammer you buy has a
+            <b>${percent(game.getEpicChance())}</b> chance to drop one for free. Epic hammers stay when you prestige.</p>
+        <h3 class="prestige">Prestige Points</h3>
         <p>Prestige resets your shards and hammers and gives 1 prestige point per hammer (now: <b>+${game.getPrestigeGain()}</b>).
             Prestige points are never spent. Each one gives +${percent(RULES.prestigeBonus)} shards per click
-            (you: <b>+${percent(game.getPrestigeBonus())}</b>) and +${percent(RULES.epicChancePerPrestige)} epic chance,
+            (you: <b>+${percent(game.getPrestigeBonus())}</b>) and +${percent(RULES.epicChancePerPrestige)} lucky drop chance,
             from ${percent(RULES.epicBaseChance)} up to ${percent(RULES.epicMaxChance)}.</p>`;
 }
 
@@ -90,6 +100,7 @@ function updateStats() {
         ['Avg shards per click', average(run), average(life)],
         ['Best click', number(run.bestClick), number(life.bestClick)],
         ['Hammers bought', number(run.hammersBought), number(life.hammersBought)],
+        ['Epic hammers bought', number(run.epicHammersBought), number(life.epicHammersBought)],
         ['Epic hammers found', number(run.epicHammersFound), number(life.epicHammersFound)],
         ['Epic hammers expected', number(run.epicHammersExpected), number(life.epicHammersExpected)],
         ['Prestiges', '–', number(life.prestiges)],
