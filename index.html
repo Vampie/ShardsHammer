@@ -7,35 +7,60 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Hammer Shards</h1>
+    <header>
+        <h1>Hammer Shards</h1>
+        <p class="shards"><span id="shards">0</span> <small>shards</small></p>
+        <p class="per-click"><span id="clickRange">0</span> shards per click</p>
+    </header>
 
-    <p>Shards: <span id="shards">0</span></p>
-    <p>Hammers: <span id="hammerCount">0</span></p>
-    <p>Epic Hammers: <span id="hammerEpicCount">0</span></p>
-    <p>Prestige Points: <span id="prestigePoints">0</span></p>
-    <p>Epic Hammer Bonus: <span id="epicHammerBonus">0</span></p>
-    <p>Hammer Cost: <span id="hammerCost">0</span></p>
-    <p>Epic Chance: <span id="epicChance">0</span></p>
+    <main>
+        <section class="collect">
+            <button id="collectShardsButton">Collect Shards</button>
+            <p id="message" role="status"></p>
+        </section>
 
-    <button id="collectShardsButton">Collect Shards</button>
-    <button id="createHammerButton">Create Hammer</button>
-    <button id="prestigeButton">Prestige</button>
-    <p id="message" role="status"></p>
+        <div class="shop">
+            <section class="card hammer">
+                <h2>Hammer</h2>
+                <p class="owned"><span id="hammerCount">0</span> <small>owned</small></p>
+                <p class="effect" id="hammerEffect"></p>
+                <button id="createHammerButton">Buy for <span id="hammerCost">0</span></button>
+            </section>
 
-    <details>
-        <summary>Info</summary>
-        <div id="info"></div>
-    </details>
+            <section class="card epic">
+                <h2>Epic Hammer</h2>
+                <p class="owned"><span id="hammerEpicCount">0</span> <small>owned</small></p>
+                <p class="effect" id="epicEffect"></p>
+                <button id="buyEpicHammerButton">Buy for <span id="hammerEpicCost">0</span></button>
+            </section>
 
-    <details>
-        <summary>Stats</summary>
-        <table>
-            <thead>
-                <tr><td></td><th scope="col">This run</th><th scope="col">Lifetime</th></tr>
-            </thead>
-            <tbody id="statsBody"></tbody>
-        </table>
-    </details>
+            <section class="card prestige">
+                <h2>Prestige</h2>
+                <p class="owned"><span id="prestigePoints">0</span> <small>points</small></p>
+                <p class="effect" id="prestigeEffect"></p>
+                <button id="prestigeButton">Prestige for +<span id="prestigeGain">0</span></button>
+            </section>
+        </div>
+
+        <section class="card">
+            <details>
+                <summary>How it works</summary>
+                <div id="info"></div>
+            </details>
+        </section>
+
+        <section class="card">
+            <details>
+                <summary>Stats</summary>
+                <table>
+                    <thead>
+                        <tr><td></td><th scope="col">This run</th><th scope="col">Lifetime</th></tr>
+                    </thead>
+                    <tbody id="statsBody"></tbody>
+                </table>
+            </details>
+        </section>
+    </main>
 
     <script src="HammerShard.js"></script>
     <script src="game.js"></script>
