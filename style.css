@@ -45,4 +45,29 @@ button:disabled {
     opacity: 0.5;
 }
 
+/* Info and stats panels */
+details {
+    margin-top: 1em;
+    color: #578A76;
+}
+
+summary {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 2px 8px;
+    text-align: right;
+}
+
+th[scope="row"] {
+    text-align: left;
+}
+
 /* You can add more rules here to style your specific game interface */

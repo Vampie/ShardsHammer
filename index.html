@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>Hammer Shards</title>
     <link rel="stylesheet" href="style.css">
@@ -14,11 +15,27 @@
     <p>Prestige Points: <span id="prestigePoints">0</span></p>
     <p>Epic Hammer Bonus: <span id="epicHammerBonus">0</span></p>
     <p>Hammer Cost: <span id="hammerCost">0</span></p>
-    <p>Epic Hammer Cost: <span id="hammerEpicCost">0</span></p>
+    <p>Epic Chance: <span id="epicChance">0</span></p>
 
     <button id="collectShardsButton">Collect Shards</button>
     <button id="createHammerButton">Create Hammer</button>
     <button id="prestigeButton">Prestige</button>
+    <p id="message" role="status"></p>
+
+    <details>
+        <summary>Info</summary>
+        <div id="info"></div>
+    </details>
+
+    <details>
+        <summary>Stats</summary>
+        <table>
+            <thead>
+                <tr><td></td><th scope="col">This run</th><th scope="col">Lifetime</th></tr>
+            </thead>
+            <tbody id="statsBody"></tbody>
+        </table>
+    </details>
 
     <script src="HammerShard.js"></script>
     <script src="game.js"></script>
