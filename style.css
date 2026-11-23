@@ -1,15 +1,19 @@
 /* Dark green color palette */
 :root {
-    --bg: #0d1f17;
-    --bg-glow: #1b4434;
-    --card: #163428;
-    --card-border: #24503d;
+    --bg: #0a1812;
+    --bg-glow: #1d4a38;
+    --card: rgba(22, 52, 40, 0.72);
+    --card-solid: #163428;
+    --card-border: rgba(103, 243, 139, 0.14);
     --text: #e6f5ec;
     --muted: #9cc3ad;
-    --hammer: #67F38B;
+    --hammer: #67f38b;
+    --hammer-deep: #2fbf63;
     --epic: #c39bff;
     --prestige: #ffd166;
-    --on-accent: #0d1f17;
+    --on-accent: #0a1812;
+    --radius: 18px;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
 * {
@@ -18,8 +22,14 @@
 
 body {
     margin: 0;
-    padding: 24px 16px 48px;
-    background: radial-gradient(circle at top, var(--bg-glow), var(--bg) 60%) fixed var(--bg);
+    min-height: 100vh;
+    padding: 32px 16px 56px;
+    background:
+        radial-gradient(ellipse 80% 50% at 50% -10%, var(--bg-glow), transparent 70%),
+        radial-gradient(circle at 100% 100%, rgba(195, 155, 255, 0.08), transparent 45%),
+        radial-gradient(circle at 0% 80%, rgba(255, 209, 102, 0.06), transparent 40%),
+        var(--bg);
+    background-attachment: fixed;
     color: var(--text);
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     line-height: 1.5;
@@ -27,52 +37,81 @@ body {
 
 header,
 main {
-    max-width: 900px;
+    max-width: 920px;
     margin: 0 auto;
 }
 
 /* Header: the shard counter is the star of the page */
 header {
     text-align: center;
-    margin-bottom: 16px;
+    margin-bottom: 24px;
 }
 
 h1 {
+    display: inline-block;
     margin: 0;
-    font-size: 1rem;
-    letter-spacing: 0.15em;
+    padding: 4px 14px;
+    font-size: 0.8rem;
+    letter-spacing: 0.25em;
     text-transform: uppercase;
     color: var(--muted);
+    border: 1px solid var(--card-border);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.03);
 }
 
 .shards {
-    margin: 4px 0 0;
-    font-size: clamp(2.5rem, 10vw, 4rem);
-    font-weight: 800;
-    line-height: 1.1;
-    color: var(--hammer);
+    margin: 12px 0 0;
+    font-size: clamp(3rem, 12vw, 5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    background: linear-gradient(180deg, #b6ffcb, var(--hammer) 55%, var(--hammer-deep));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 24px rgba(103, 243, 139, 0.35));
     font-variant-numeric: tabular-nums;
 }
 
-.shards small,
+.shards small {
+    display: block;
+    margin-top: 2px;
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    -webkit-text-fill-color: var(--muted);
+}
+
 .owned small {
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 600;
     color: var(--muted);
 }
 
 .per-click {
-    margin: 0;
-    color: var(--muted);
+    display: inline-block;
+    margin: 12px 0 0;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: rgba(103, 243, 139, 0.1);
+    color: var(--hammer);
+    font-size: 0.9rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
 }
 
 /* Cards */
 .card {
     background: var(--card);
     border: 1px solid var(--card-border);
-    border-radius: 14px;
-    padding: 16px;
+    border-radius: var(--radius);
+    padding: 18px;
     margin-bottom: 16px;
+    box-shadow: var(--shadow);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
 }
 
 /* One column on phones, three side by side when they fit (never 2 + 1) */
@@ -89,10 +128,32 @@ h1 {
 }
 
 .shop .card {
+    position: relative;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     margin: 0;
-    border-top: 4px solid var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 30%, transparent);
+    background:
+        radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 60%),
+        var(--card);
+    transition: transform 200ms ease-out, box-shadow 200ms ease-out;
+}
+
+/* Accent bar along the top of each shop card */
+.shop .card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+}
+
+@media (hover: hover) {
+    .shop .card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow), 0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent);
+    }
 }
 
 .hammer {
@@ -109,20 +170,25 @@ h1 {
 
 h2 {
     margin: 0;
-    font-size: 1rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
     color: var(--accent);
 }
 
 .owned {
-    margin: 4px 0;
-    font-size: 2rem;
-    font-weight: 800;
+    margin: 6px 0 8px;
+    font-size: 2.4rem;
+    font-weight: 900;
+    line-height: 1.1;
     font-variant-numeric: tabular-nums;
 }
 
 .effect {
     flex-grow: 1;
     margin: 0 0 16px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--card-border);
     font-size: 0.9rem;
     color: var(--muted);
     white-space: pre-line;
@@ -131,58 +197,93 @@ h2 {
 /* Basic game interface rules */
 button {
     font: inherit;
-    font-weight: 700;
+    font-weight: 800;
     border: 0;
-    border-radius: 10px;
-    padding: 12px 16px;
-    background: var(--accent, var(--hammer));
+    border-radius: 12px;
+    padding: 14px 16px;
+    min-height: 48px;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--accent, var(--hammer)) 85%, white), var(--accent, var(--hammer)));
     color: var(--on-accent);
+    box-shadow:
+        0 4px 14px color-mix(in srgb, var(--accent, var(--hammer)) 30%, transparent),
+        inset 0 -3px 0 rgba(0, 0, 0, 0.18);
     cursor: pointer;
     touch-action: manipulation;
-    transition: transform 100ms ease-out, filter 150ms ease-out;
+    font-variant-numeric: tabular-nums;
+    transition: transform 100ms ease-out, filter 150ms ease-out, box-shadow 150ms ease-out;
 }
 
 button:active:not(:disabled) {
-    transform: scale(0.97);
+    transform: scale(0.97) translateY(1px);
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.18);
 }
 
 button:focus-visible {
     outline: 3px solid var(--text);
-    outline-offset: 2px;
+    outline-offset: 3px;
 }
 
 @media (hover: hover) {
     button:hover:not(:disabled) {
-        filter: brightness(1.1);
+        filter: brightness(1.08);
     }
 }
 
 /* Disable buttons using the disabled attribute */
 button:disabled {
-    opacity: 0.4;
+    opacity: 0.35;
+    box-shadow: none;
+    filter: grayscale(0.5);
     cursor: not-allowed;
+}
+
+.collect {
+    margin-bottom: 24px;
 }
 
 #collectShardsButton {
     width: 100%;
-    padding: 20px;
-    font-size: 1.4rem;
+    padding: 24px;
+    border-radius: var(--radius);
+    font-size: clamp(1.3rem, 5vw, 1.7rem);
+    letter-spacing: 0.03em;
+    background: linear-gradient(135deg, #a8ffc0, var(--hammer) 45%, var(--hammer-deep));
+    box-shadow:
+        0 10px 30px rgba(103, 243, 139, 0.3),
+        inset 0 -5px 0 rgba(0, 0, 0, 0.2),
+        inset 0 2px 0 rgba(255, 255, 255, 0.4);
+    animation: glow 2.4s ease-in-out infinite;
 }
 
-.collect {
-    margin-bottom: 16px;
+#collectShardsButton:active {
+    transform: scale(0.98) translateY(2px);
+}
+
+@keyframes glow {
+    50% {
+        box-shadow:
+            0 10px 44px rgba(103, 243, 139, 0.5),
+            inset 0 -5px 0 rgba(0, 0, 0, 0.2),
+            inset 0 2px 0 rgba(255, 255, 255, 0.4);
+    }
 }
 
 /* Empty status line takes no space but stays in the page, so screen readers still announce it */
 #message:empty {
     margin: 0;
+    padding: 0;
+    border: 0;
 }
 
 #message {
-    margin: 8px 0 0;
+    margin: 12px 0 0;
+    padding: 10px 14px;
     text-align: center;
     font-weight: 700;
     color: var(--epic);
+    border: 1px solid rgba(195, 155, 255, 0.35);
+    border-radius: 12px;
+    background: rgba(195, 155, 255, 0.1);
 }
 
 select,
@@ -195,15 +296,50 @@ input {
 }
 
 /* Info and stats panels */
-summary {
+details > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 32px;
+    list-style: none;
     cursor: pointer;
-    font-weight: 700;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+}
+
+details > summary::-webkit-details-marker {
+    display: none;
+}
+
+details > summary::after {
+    content: "";
+    width: 10px;
+    height: 10px;
+    margin-right: 4px;
+    border-right: 2px solid var(--muted);
+    border-bottom: 2px solid var(--muted);
+    transform: rotate(45deg);
+    transition: transform 200ms ease-out;
+}
+
+details[open] > summary::after {
+    transform: rotate(-135deg);
+}
+
+details[open] > summary {
+    margin-bottom: 8px;
 }
 
 #info h3 {
     margin: 16px 0 4px;
-    font-size: 1rem;
+    padding-left: 10px;
+    border-left: 3px solid var(--accent, var(--text));
+    font-size: 0.95rem;
     color: var(--accent, var(--text));
+}
+
+#info h3:first-child {
+    margin-top: 4px;
 }
 
 #info p {
@@ -217,16 +353,14 @@ summary {
 
 table {
     width: 100%;
-    margin-top: 8px;
     border-collapse: collapse;
     font-variant-numeric: tabular-nums;
 }
 
 th,
 td {
-    padding: 6px 8px;
+    padding: 8px 10px;
     text-align: right;
-    border-bottom: 1px solid var(--card-border);
 }
 
 td,
@@ -235,8 +369,15 @@ thead th {
 }
 
 thead th {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
     color: var(--muted);
+    border-bottom: 1px solid var(--card-border);
+}
+
+tbody tr:nth-child(odd) {
+    background: rgba(255, 255, 255, 0.03);
 }
 
 th[scope="row"] {
@@ -245,4 +386,11 @@ th[scope="row"] {
     color: var(--muted);
 }
 
-/* You can add more rules here to style your specific game interface */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}
