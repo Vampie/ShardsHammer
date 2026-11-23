@@ -1,0 +1,9 @@
+{
+  // Static site on Cloudflare Workers: no Worker script, Cloudflare serves the files directly.
+  "name": "shardshammer",
+  "compatibility_date": "2026-11-23",
+  "assets": {
+    // The game lives in the repo root (GitHub Pages serves it from there too); .assetsignore keeps everything else out.
+    "directory": "."
+  }
+}
