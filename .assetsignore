@@ -1,0 +1,11 @@
+# Same format as .gitignore. Only the game files may be uploaded to Cloudflare.
+.git/
+.vs/
+.claude/
+.wrangler/
+node_modules/
+.assetsignore
+.gitignore
+wrangler.jsonc
+README.md
+LICENSE
