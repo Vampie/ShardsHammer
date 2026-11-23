@@ -3,6 +3,8 @@ const RULES = {
     hammerBaseCost: 100,
     hammerCostGrowth: 1.1,          // every hammer this run makes the next one 10% more expensive
     shardsPerHammer: 1,             // extra shards per click, per hammer
+    epicBaseCost: 500,
+    epicCostGrowth: 1.5,            // every epic hammer owned (bought or found) makes the next one 50% more expensive
     epicBonus: 0.25,                // +25% shards per click, per epic hammer
     prestigeBonus: 0.05,            // +5% shards per click, per prestige point
     epicBaseChance: 0.005,          // 0.5% chance per hammer bought
@@ -19,6 +21,7 @@ function newStats() {
         shardsSpent: 0,
         bestClick: 0,
         hammersBought: 0,
+        epicHammersBought: 0,
         epicHammersFound: 0,
         epicHammersExpected: 0,
         startedAt: Date.now(),
@@ -78,6 +81,23 @@ class HammerShards {
         return this.#createHammer();
     }
 
+    #buyEpicHammer() {
+        const epicCost = this.calculateTotalHammerEpicCost();
+        if (this.shards < epicCost) {
+            return;
+        }
+
+        this.shards -= epicCost;
+        this.hammerEpicCount += 1;
+        this.#track('shardsSpent', epicCost);
+        this.#track('epicHammersBought', 1);
+        this.save();
+    }
+
+    buyEpicHammer() {
+        this.#buyEpicHammer();
+    }
+
     // Trades this run's shards and hammers for permanent prestige points. Epic hammers stay.
     #prestige() {
         const gained = this.getPrestigeGain();
@@ -128,6 +148,16 @@ class HammerShards {
 
     calculateTotalHammerCost() {
         return Math.round(RULES.hammerBaseCost * RULES.hammerCostGrowth ** this.hammerCount);
+    }
+
+    calculateTotalHammerEpicCost() {
+        return Math.round(RULES.epicBaseCost * RULES.epicCostGrowth ** this.hammerEpicCount);
+    }
+
+    // Lowest and highest shards a click gives right now.
+    getClickRange() {
+        const hammerShards = this.hammerCount * RULES.shardsPerHammer;
+        return [1, 10].map(base => (base + hammerShards) * this.getMultiplier());
     }
 
     // Everything a click gives is multiplied by this.

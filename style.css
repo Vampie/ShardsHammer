@@ -1,73 +1,248 @@
 /* Dark green color palette */
+:root {
+    --bg: #0d1f17;
+    --bg-glow: #1b4434;
+    --card: #163428;
+    --card-border: #24503d;
+    --text: #e6f5ec;
+    --muted: #9cc3ad;
+    --hammer: #67F38B;
+    --epic: #c39bff;
+    --prestige: #ffd166;
+    --on-accent: #0d1f17;
+}
+
+* {
+    box-sizing: border-box;
+}
+
 body {
-    background-color: #67F38B;
+    margin: 0;
+    padding: 24px 16px 48px;
+    background: radial-gradient(circle at top, var(--bg-glow), var(--bg) 60%) fixed var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.5;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    color: #578A76;
+header,
+main {
+    max-width: 900px;
+    margin: 0 auto;
 }
 
-p {
-    color: #578A76;
+/* Header: the shard counter is the star of the page */
+header {
+    text-align: center;
+    margin-bottom: 16px;
 }
 
+h1 {
+    margin: 0;
+    font-size: 1rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.shards {
+    margin: 4px 0 0;
+    font-size: clamp(2.5rem, 10vw, 4rem);
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--hammer);
+    font-variant-numeric: tabular-nums;
+}
+
+.shards small,
+.owned small {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+.per-click {
+    margin: 0;
+    color: var(--muted);
+}
+
+/* Cards */
+.card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+/* One column on phones, three side by side when they fit (never 2 + 1) */
+.shop {
+    display: grid;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+@media (min-width: 640px) {
+    .shop {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.shop .card {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    border-top: 4px solid var(--accent);
+}
+
+.hammer {
+    --accent: var(--hammer);
+}
+
+.epic {
+    --accent: var(--epic);
+}
+
+.prestige {
+    --accent: var(--prestige);
+}
+
+h2 {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--accent);
+}
+
+.owned {
+    margin: 4px 0;
+    font-size: 2rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+.effect {
+    flex-grow: 1;
+    margin: 0 0 16px;
+    font-size: 0.9rem;
+    color: var(--muted);
+    white-space: pre-line;
+}
+
+/* Basic game interface rules */
 button {
-    background-color: #619F88;
-    color: white;
+    font: inherit;
+    font-weight: 700;
+    border: 0;
+    border-radius: 10px;
+    padding: 12px 16px;
+    background: var(--accent, var(--hammer));
+    color: var(--on-accent);
+    cursor: pointer;
+    touch-action: manipulation;
+    transition: transform 100ms ease-out, filter 150ms ease-out;
+}
+
+button:active:not(:disabled) {
+    transform: scale(0.97);
+}
+
+button:focus-visible {
+    outline: 3px solid var(--text);
+    outline-offset: 2px;
+}
+
+@media (hover: hover) {
+    button:hover:not(:disabled) {
+        filter: brightness(1.1);
+    }
+}
+
+/* Disable buttons using the disabled attribute */
+button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+#collectShardsButton {
+    width: 100%;
+    padding: 20px;
+    font-size: 1.4rem;
+}
+
+.collect {
+    margin-bottom: 16px;
+}
+
+/* Empty status line takes no space but stays in the page, so screen readers still announce it */
+#message:empty {
+    margin: 0;
+}
+
+#message {
+    margin: 8px 0 0;
+    text-align: center;
+    font-weight: 700;
+    color: var(--epic);
 }
 
 select,
 input {
     background-color: #fff;
     color: #000;
-}
-
-/* Basic game interface rules */
-button {
-    cursor: pointer;
-}
-
-select,
-input {
     border: 1px solid #ccc;
     padding: 5px;
     margin: 5px;
 }
 
-/* Disable buttons using the disabled attribute */
-button:disabled {
-    background-color: #990000;
-    opacity: 0.5;
-}
-
 /* Info and stats panels */
-details {
-    margin-top: 1em;
-    color: #578A76;
-}
-
 summary {
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 700;
+}
+
+#info h3 {
+    margin: 16px 0 4px;
+    font-size: 1rem;
+    color: var(--accent, var(--text));
+}
+
+#info p {
+    margin: 0;
+    color: var(--muted);
+}
+
+#info b {
+    color: var(--text);
 }
 
 table {
+    width: 100%;
+    margin-top: 8px;
     border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
 }
 
 th,
 td {
-    padding: 2px 8px;
+    padding: 6px 8px;
     text-align: right;
+    border-bottom: 1px solid var(--card-border);
+}
+
+td,
+thead th {
+    white-space: nowrap;
+}
+
+thead th {
+    font-size: 0.85rem;
+    color: var(--muted);
 }
 
 th[scope="row"] {
     text-align: left;
+    font-weight: 400;
+    color: var(--muted);
 }
 
 /* You can add more rules here to style your specific game interface */
